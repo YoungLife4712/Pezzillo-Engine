@@ -81,15 +81,18 @@ class CreditsState extends MusicBeatState
 		#end
 
 		var pisspoop:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
+			['Pezzillo Engine Team'],
+			['YoungLife4712', 'young', 'Programmer/Owner of Pezzillo Engine', 'https://www.youtube.com/channel/UCidwNhLA9UiUvnV2oMaMhmQ', 'DD5F2D'],
+			['Benderzz', 'benderzz', 'Programmer/Tech Support', 'https://www.youtube.com/channel/UCH7mXvrNz1S0TACVb1JZ7EA', 'FF0000'],
+			[''],
+			['Special Thanks'],
+			['UrPalBurrito', 'burrito', 'Made the Credits Icons', 'https://scratch.mit.edu/users/sumdumboi/', 'EF855A'],
+			[''],
 			['Psych Engine Team'],
 			['Shadow Mario',		'shadowmario',		'Main Programmer of Psych Engine',							'https://twitter.com/Shadow_Mario_',	'444444'],
 			['RiverOaken',			'riveroaken',		'Main Artist/Animator of Psych Engine',						'https://twitter.com/RiverOaken',		'C30085'],
 			['shubs',				'shubs',			'Additional Programmer of Psych Engine',					'https://twitter.com/yoshubs',			'279ADC'],
-			[''],
-			['Former Engine Members'],
 			['bb-panzu',			'bb-panzu',			'Ex-Programmer of Psych Engine',							'https://twitter.com/bbsub3',			'389A58'],
-			[''],
-			['Engine Contributors'],
 			['iFlicky',				'iflicky',			'Composer of Psync and Tea Time\nMade the Dialogue Sounds',	'https://twitter.com/flicky_i',			'AA32FE'],
 			['SqirraRNG',			'gedehari',			'Chart Editor\'s Sound Waveform base',						'https://twitter.com/gedehari',			'FF9300'],
 			['PolybiusProxy',		'polybiusproxy',	'.MP4 Video Loader Extension',								'https://twitter.com/polybiusproxy',	'FFEAA6'],
