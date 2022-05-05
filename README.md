@@ -24,7 +24,7 @@ If you really want to know, follow up the tutorial in the original Engine here: 
 ## Credits for Pezzillo Engine:
 
 * YoungLife4712 - Main Code Editor
-* Benderzz - The real expert in coding
+* Benderzz - Tech Support
 * UrPalBurrito - Being in VC for one time I was coding
 * DustLory - For believing in me
 
