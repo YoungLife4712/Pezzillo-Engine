@@ -291,9 +291,6 @@ class PlayState extends MusicBeatState
 
 		// For the "Just the Two of Us" achievement
 
-		if(generatedMusic && (ClientPrefs.gamerMode)) 
-			SONG.speed = SONG.speed*3;
-
 
 		for (i in 0...keysArray.length)
 		{
@@ -1744,6 +1741,9 @@ class PlayState extends MusicBeatState
 		FlxG.sound.music.onComplete = onSongComplete;
 		vocals.play();
 
+
+		if((ClientPrefs.gamerMode)) 
+			songSpeed = songSpeed * 1.25;
 
 
 		if(startOnTime > 0)
