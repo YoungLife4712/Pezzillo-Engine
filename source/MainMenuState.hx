@@ -25,7 +25,7 @@ using StringTools;
 
 class MainMenuState extends MusicBeatState
 {
-	public static var psychEngineVersion:String = '0.1.0'; //This is also used for Discord RPC
+	public static var psychEngineVersion:String = '0.1.1-ALPHA'; //This is also used for Discord RPC
 	public static var curSelected:Int = 0;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
@@ -38,7 +38,6 @@ class MainMenuState extends MusicBeatState
 		#if MODS_ALLOWED 'mods', #end
 		#if ACHIEVEMENTS_ALLOWED 'awards', #end
 		'credits',
-		#if !switch 'donate', #end
 		'options'
 	];
 
@@ -99,7 +98,7 @@ class MainMenuState extends MusicBeatState
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
 
-		var scale:Float = 1;
+		var scale:Float = 0.82;
 		/*if(optionShit.length > 6) {
 			scale = 6 / optionShit.length;
 		}*/
@@ -107,7 +106,7 @@ class MainMenuState extends MusicBeatState
 		for (i in 0...optionShit.length)
 		{
 			var offset:Float = 108 - (Math.max(optionShit.length, 4) - 4) * 80;
-			var menuItem:FlxSprite = new FlxSprite(0, (i * 140)  + offset);
+			var menuItem:FlxSprite = new FlxSprite(75, (i * 122) + 30 );
 			menuItem.scale.x = scale;
 			menuItem.scale.y = scale;
 			menuItem.frames = Paths.getSparrowAtlas('mainmenu/menu_' + optionShit[i]);
@@ -115,17 +114,34 @@ class MainMenuState extends MusicBeatState
 			menuItem.animation.addByPrefix('selected', optionShit[i] + " white", 24);
 			menuItem.animation.play('idle');
 			menuItem.ID = i;
-			menuItem.screenCenter(X);
+			//menuItem.screenCenter(X);
+			switch(i){
+				case 0:
+					menuItem.setPosition(110, 100);
+				case 1:
+					menuItem.setPosition(820, 100);
+				case 2:
+					menuItem.setPosition(110, 300);
+				case 3:
+					menuItem.setPosition(840, 300);
+				case 4:
+					menuItem.setPosition(110, 500);
+				case 5:
+					menuItem.setPosition(820, 500);
+					
+
+		  			}
 			menuItems.add(menuItem);
 			var scr:Float = (optionShit.length - 4) * 0.135;
 			if(optionShit.length < 6) scr = 0;
 			menuItem.scrollFactor.set(0, scr);
 			menuItem.antialiasing = ClientPrefs.globalAntialiasing;
 			//menuItem.setGraphicSize(Std.int(menuItem.width * 0.58));
-			menuItem.updateHitbox();
+			//menuItem.updateHitbox();
 		}
+	
 
-		FlxG.camera.follow(camFollowPos, null, 1);
+		//FlxG.camera.follow(camFollowPos, null, 1);
 
 		var versionShit:FlxText = new FlxText(12, FlxG.height - 44, 0, "Pezzillo Engine v" + psychEngineVersion, 12);
 		versionShit.scrollFactor.set();
@@ -182,14 +198,27 @@ class MainMenuState extends MusicBeatState
 			if (controls.UI_UP_P)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
-				changeItem(-1);
+				changeItem(0);
 			}
 
 			if (controls.UI_DOWN_P)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
-				changeItem(1);
+				changeItem(0);
 			}
+			
+			if (controls.UI_LEFT_P)
+			{
+				FlxG.sound.play(Paths.sound('scrollMenu'));
+				changeItem(0);
+			}
+
+			if (controls.UI_RIGHT_P)
+			{
+				FlxG.sound.play(Paths.sound('scrollMenu'));
+				changeItem(0);
+			}
+		
 
 			if (controls.BACK)
 			{
@@ -264,18 +293,77 @@ class MainMenuState extends MusicBeatState
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
-			spr.screenCenter(X);
+			//spr.screenCenter(X);
 		});
 	}
+
+
 
 	function changeItem(huh:Int = 0)
 	{
 		curSelected += huh;
 
-		if (curSelected >= menuItems.length)
+			// UP & DOWN statements, Left Side
+
+		if ((curSelected == 2)&&(controls.UI_DOWN_P))
+			curSelected = 4;
+		
+		if ((curSelected == 0)&&(controls.UI_DOWN_P)) 		//Longest if statement chain in a FNF mod world record?!!?!?!?!?! -Young 
+			curSelected = 2;
+
+		if ((curSelected == 4)&&(controls.UI_DOWN_P))
 			curSelected = 0;
-		if (curSelected < 0)
-			curSelected = menuItems.length - 1;
+
+		if ((curSelected == 2)&&(controls.UI_UP_P))
+			curSelected = 0;
+
+		if ((curSelected == 0)&&(controls.UI_UP_P)) 
+			curSelected = 4;
+
+		if ((curSelected == 4)&&(controls.UI_UP_P))
+			curSelected = 2;
+
+			// UP & DOWN statements, Right Side
+
+		if ((curSelected == 3)&&(controls.UI_DOWN_P))
+			curSelected = 5;
+
+		if ((curSelected == 1)&&(controls.UI_DOWN_P))
+			curSelected = 3;
+
+		if ((curSelected == 5)&&(controls.UI_DOWN_P))
+			curSelected = 1;
+
+		if ((curSelected == 3)&&(controls.UI_UP_P))
+			curSelected = 1;
+		
+		if ((curSelected == 1)&&(controls.UI_UP_P))
+			curSelected = 5;
+
+		if ((curSelected == 5)&&(controls.UI_UP_P))
+			curSelected = 3;
+		
+
+			// LEFT & RIGHT statements
+
+		if ((curSelected == 0)&&(controls.UI_RIGHT_P))
+			curSelected = 1;
+		
+		if ((curSelected == 1)&&(controls.UI_LEFT_P))
+			curSelected = 0;
+
+		if ((curSelected == 2)&&(controls.UI_RIGHT_P))
+			curSelected = 3;
+		
+		if ((curSelected == 3)&&(controls.UI_LEFT_P))
+			curSelected = 2;
+
+		if ((curSelected == 4)&&(controls.UI_RIGHT_P))
+			curSelected = 5;
+
+		if ((curSelected == 5)&&(controls.UI_LEFT_P))
+			curSelected = 4;
+	
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
@@ -289,7 +377,7 @@ class MainMenuState extends MusicBeatState
 				if(menuItems.length > 4) {
 					add = menuItems.length * 8;
 				}
-				camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y - add);
+				camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y + add);
 				spr.centerOffsets();
 			}
 		});
