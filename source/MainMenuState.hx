@@ -198,25 +198,25 @@ class MainMenuState extends MusicBeatState
 			if (controls.UI_UP_P)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
-				changeItem(0);
+				changeItem(-2);
 			}
 
 			if (controls.UI_DOWN_P)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
-				changeItem(0);
+				changeItem(2);
 			}
 			
 			if (controls.UI_LEFT_P)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
-				changeItem(0);
+				changeItem(-1);
 			}
 
 			if (controls.UI_RIGHT_P)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
-				changeItem(0);
+				changeItem(1);
 			}
 		
 
@@ -300,86 +300,29 @@ class MainMenuState extends MusicBeatState
 
 
 	function changeItem(huh:Int = 0)
-	{
-		curSelected += huh;
-
-			// UP & DOWN statements, Left Side
-
-		if ((curSelected == 2)&&(controls.UI_DOWN_P))
-			curSelected = 4;
-		
-		if ((curSelected == 0)&&(controls.UI_DOWN_P)) 		//Longest if statement chain in a FNF mod world record?!!?!?!?!?! -Young 
-			curSelected = 2;
-
-		if ((curSelected == 4)&&(controls.UI_DOWN_P))
-			curSelected = 0;
-
-		if ((curSelected == 2)&&(controls.UI_UP_P))
-			curSelected = 0;
-
-		if ((curSelected == 0)&&(controls.UI_UP_P)) 
-			curSelected = 4;
-
-		if ((curSelected == 4)&&(controls.UI_UP_P))
-			curSelected = 2;
-
-			// UP & DOWN statements, Right Side
-
-		if ((curSelected == 3)&&(controls.UI_DOWN_P))
-			curSelected = 5;
-
-		if ((curSelected == 1)&&(controls.UI_DOWN_P))
-			curSelected = 3;
-
-		if ((curSelected == 5)&&(controls.UI_DOWN_P))
-			curSelected = 1;
-
-		if ((curSelected == 3)&&(controls.UI_UP_P))
-			curSelected = 1;
-		
-		if ((curSelected == 1)&&(controls.UI_UP_P))
-			curSelected = 5;
-
-		if ((curSelected == 5)&&(controls.UI_UP_P))
-			curSelected = 3;
-		
-
-			// LEFT & RIGHT statements
-
-		if ((curSelected == 0)&&(controls.UI_RIGHT_P))
-			curSelected = 1;
-		
-		if ((curSelected == 1)&&(controls.UI_LEFT_P))
-			curSelected = 0;
-
-		if ((curSelected == 2)&&(controls.UI_RIGHT_P))
-			curSelected = 3;
-		
-		if ((curSelected == 3)&&(controls.UI_LEFT_P))
-			curSelected = 2;
-
-		if ((curSelected == 4)&&(controls.UI_RIGHT_P))
-			curSelected = 5;
-
-		if ((curSelected == 5)&&(controls.UI_LEFT_P))
-			curSelected = 4;
-	
-
-		menuItems.forEach(function(spr:FlxSprite)
 		{
-			spr.animation.play('idle');
-			spr.updateHitbox();
-
-			if (spr.ID == curSelected)
+			curSelected += huh;
+	
+			if (curSelected >= menuItems.length)
+				curSelected = 0;
+			if (curSelected < 0)
+				curSelected = menuItems.length - 1;
+	
+			menuItems.forEach(function(spr:FlxSprite)
 			{
-				spr.animation.play('selected');
-				var add:Float = 0;
-				if(menuItems.length > 4) {
-					add = menuItems.length * 8;
+				spr.animation.play('idle');
+				spr.updateHitbox();
+	
+				if (spr.ID == curSelected)
+				{
+					spr.animation.play('selected');
+					var add:Float = 0;
+					if(menuItems.length > 4) {
+						add = menuItems.length * 8;
+					}
+					camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y - add);
+					spr.centerOffsets();
 				}
-				camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y + add);
-				spr.centerOffsets();
-			}
-		});
-	}
+			});
+		}
 }
