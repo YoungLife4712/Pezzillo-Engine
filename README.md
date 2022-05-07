@@ -39,9 +39,10 @@ All of Psych Engine Features (https://github.com/ShadowMario/FNF-PsychEngine), p
   - Decreased Healing from hitting notes.
   - Increased Scroll speed for ALL songs that get coded in.
   - Missing 10 times or ending a song with 85% or less accuracy will KILL you.
-
+ 
+ * Brand New MAIN MENU.
+ 
 # Planned Features:
   - Better HP Bar functionalities.
   - Winning and Recover Icons for all characters. (Recover icons appear once your character exits the Danger phase - less that 25% HP -).
   - Customizable in-game GUI.
-  - Brand New MAIN MENU.
