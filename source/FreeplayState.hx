@@ -271,6 +271,7 @@ class FreeplayState extends MusicBeatState
 		var upP = controls.UI_UP_P;
 		var downP = controls.UI_DOWN_P;
 		var accepted = controls.ACCEPT;
+		var acceptMouse = FlxG.mouse.justPressed;
 		var space = FlxG.keys.justPressed.SPACE;
 		var ctrl = FlxG.keys.justPressed.CONTROL;
 
@@ -279,12 +280,12 @@ class FreeplayState extends MusicBeatState
 
 		if(songs.length > 1)
 		{
-			if (upP)
+			if (upP || FlxG.mouse.wheel >= 1)
 			{
 				changeSelection(-shiftMult);
 				holdTime = 0;
 			}
-			if (downP)
+			if (downP || FlxG.mouse.wheel <= -1)
 			{
 				changeSelection(shiftMult);
 				holdTime = 0;
@@ -351,7 +352,7 @@ class FreeplayState extends MusicBeatState
 			}
 		}
 
-		else if (accepted)
+		else if (accepted || acceptMouse)
 		{
 			persistentUpdate = false;
 			var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);

@@ -146,7 +146,8 @@ class PlayState extends MusicBeatState
 	private var curSong:String = "";
 
 	public var gfSpeed:Int = 1;
-	public var health:Float = 1;
+	public var health:Float = 50;
+	public var maxHealth:Float = 100;
 	public var combo:Int = 0;
 
 	private var healthBarBG:AttachedSprite;
@@ -910,7 +911,7 @@ class PlayState extends MusicBeatState
 			'songPercent', 0, 1);
 		timeBar.scrollFactor.set();
 		timeBar.createFilledBar(0xFF000000, 0xFFFFFFFF);
-		timeBar.numDivisions = 800; //How much lag this causes?? Should i tone it down to idk, 400 or 200?
+		timeBar.numDivisions = 1000; //How much lag this causes?? Should i tone it down to idk, 400 or 200?
 		timeBar.alpha = 0;
 		timeBar.visible = showTime;
 		add(timeBar);
@@ -1016,8 +1017,9 @@ class PlayState extends MusicBeatState
 		if(ClientPrefs.downScroll) healthBarBG.y = 0.11 * FlxG.height;
 
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
-			'health', 0, 2);
+			'health', 0, maxHealth);
 		healthBar.scrollFactor.set();
+		healthBar.numDivisions = 1000;
 		// healthBar
 		healthBar.visible = !ClientPrefs.hideHud;
 		healthBar.alpha = ClientPrefs.healthBarAlpha;
@@ -2328,9 +2330,9 @@ class PlayState extends MusicBeatState
 		super.update(elapsed);
 
 		if(ratingName == '?') {
-			scoreTxt.text = 'Score: ' + songScore + ' | Skill Issues: ' + songMisses + ' | Rating: ' + ratingName;
+			scoreTxt.text = 'Score: ' + songScore + ' | Health: ' + health + '% ' + ' | Skill Issues: ' + songMisses + ' | Rating: ' + ratingName;
 		} else {
-			scoreTxt.text = 'Score: ' + songScore + ' | Skill Issues: ' + songMisses + ' | Rating: ' + ratingName + ' (' + Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC;//peeps wanted no integer rating
+			scoreTxt.text = 'Score: ' + songScore + ' | Health: ' + health + '% ' + ' | Skill Issues: ' + songMisses + ' | Rating: ' + ratingName + ' (' + Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC;//peeps wanted no integer rating
 		}
 
 		if(botplayTxt.visible) {
@@ -2388,8 +2390,8 @@ class PlayState extends MusicBeatState
 		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) + (150 * iconP1.scale.x - 150) / 2 - iconOffset;
 		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (150 * iconP2.scale.x) / 2 - iconOffset * 2;
 
-		if (health > 2)
-			health = 2;
+		if (health > maxHealth)
+			health = maxHealth;
 
 		if (healthBar.percent < 20)
 			iconP1.animation.curAnim.curFrame = 1;
@@ -3760,14 +3762,7 @@ class PlayState extends MusicBeatState
 		});
 		combo = 0;
 
-		if(!ClientPrefs.gamerMode)
-			{
 			health -= daNote.missHealth * healthLoss;
-			}
-		if(ClientPrefs.gamerMode)
-			{
-			health -= (daNote.missHealth * healthLoss * 8);
-			}
 
 		if(instakillOnMiss)
 		{
@@ -3848,6 +3843,19 @@ class PlayState extends MusicBeatState
 
 	function opponentNoteHit(note:Note):Void
 	{
+		if (ClientPrefs.gamerMode)
+
+			{
+				if (health >= 1)
+					{
+						health = health - 1.25;
+					} 
+				if (health <= 0)
+					{
+						health = 1;
+					}
+			}
+		
 		if (Paths.formatToSongPath(SONG.song) != 'tutorial')
 			camZooming = true;
 

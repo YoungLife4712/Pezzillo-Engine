@@ -48,6 +48,8 @@ class MainMenuState extends MusicBeatState
 
 	override function create()
 	{
+		FlxG.mouse.visible = true; // Mouse!
+
 		WeekData.loadTheFirstEnabledMod();
 
 		#if desktop
@@ -183,6 +185,12 @@ class MainMenuState extends MusicBeatState
 
 	var selectedSomethin:Bool = false;
 
+	var beingAClickyBoi:Bool = false;
+    var ableToSelect:Bool = true;
+    var selectedAThing:Bool = false; 
+	var playingsound:Bool = false; // Yeah Benderzz, where is the selection sound?
+	var issound:Bool = false;
+
 	override function update(elapsed:Float)
 	{
 		if (FlxG.sound.music.volume < 0.8)
@@ -193,8 +201,38 @@ class MainMenuState extends MusicBeatState
 		var lerpVal:Float = CoolUtil.boundTo(elapsed * 7.5, 0, 1);
 		camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, lerpVal), FlxMath.lerp(camFollowPos.y, camFollow.y, lerpVal));
 
+		menuItems.forEach(function(spr:FlxSprite)
+            {
+                if(beingAClickyBoi){
+                    if(!FlxG.mouse.overlaps(spr)){
+                        spr.animation.play('idle');
+						spr.centerOffsets();
+						
+                    }
+                }
+                if(FlxG.mouse.overlaps(spr)){
+					playingsound = true;
+                    if(ableToSelect){
+						curSelected = spr.ID;
+                        beingAClickyBoi = true;
+						spr.animation.play('selected');
+						spr.centerOffsets();
+					}
+				    if(FlxG.mouse.justPressed && ableToSelect){
+                        selectedAThing = true;
+                    }
+					else 
+					{
+						selectedAThing = false;
+					}
+                }
+            });
+	
+		
+
 		if (!selectedSomethin)
 		{
+
 			if (controls.UI_UP_P)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
@@ -227,7 +265,7 @@ class MainMenuState extends MusicBeatState
 				MusicBeatState.switchState(new TitleState());
 			}
 
-			if (controls.ACCEPT)
+			if (controls.ACCEPT || selectedAThing)
 			{
 				if (optionShit[curSelected] == 'donate')
 				{
@@ -304,65 +342,66 @@ class MainMenuState extends MusicBeatState
 		curSelected += huh;
 
 			// UP & DOWN statements, Left Side
-
 		if ((curSelected == 2)&&(controls.UI_DOWN_P))
 			curSelected = 4;
-		
+			beingAClickyBoi = false;
+				
 		if ((curSelected == 0)&&(controls.UI_DOWN_P)) 		//Longest if statement chain in a FNF mod world record?!!?!?!?!?! -Young 
 			curSelected = 2;
-
-		if ((curSelected == 4)&&(controls.UI_DOWN_P))
-			curSelected = 0;
+			beingAClickyBoi = false;
 
 		if ((curSelected == 2)&&(controls.UI_UP_P))
 			curSelected = 0;
-
-		if ((curSelected == 0)&&(controls.UI_UP_P)) 
-			curSelected = 4;
+			beingAClickyBoi = false;
 
 		if ((curSelected == 4)&&(controls.UI_UP_P))
 			curSelected = 2;
+			beingAClickyBoi = false;
 
 			// UP & DOWN statements, Right Side
 
 		if ((curSelected == 3)&&(controls.UI_DOWN_P))
 			curSelected = 5;
+			beingAClickyBoi = false;
 
 		if ((curSelected == 1)&&(controls.UI_DOWN_P))
 			curSelected = 3;
-
-		if ((curSelected == 5)&&(controls.UI_DOWN_P))
-			curSelected = 1;
+			beingAClickyBoi = false;
 
 		if ((curSelected == 3)&&(controls.UI_UP_P))
 			curSelected = 1;
-		
-		if ((curSelected == 1)&&(controls.UI_UP_P))
-			curSelected = 5;
+			beingAClickyBoi = false;
 
 		if ((curSelected == 5)&&(controls.UI_UP_P))
 			curSelected = 3;
+			beingAClickyBoi = false;
 		
 
 			// LEFT & RIGHT statements
 
 		if ((curSelected == 0)&&(controls.UI_RIGHT_P))
 			curSelected = 1;
+			beingAClickyBoi = false;
 		
 		if ((curSelected == 1)&&(controls.UI_LEFT_P))
 			curSelected = 0;
+			beingAClickyBoi = false;
 
 		if ((curSelected == 2)&&(controls.UI_RIGHT_P))
 			curSelected = 3;
+			beingAClickyBoi = false;
 		
 		if ((curSelected == 3)&&(controls.UI_LEFT_P))
 			curSelected = 2;
+			beingAClickyBoi = false;
 
 		if ((curSelected == 4)&&(controls.UI_RIGHT_P))
 			curSelected = 5;
+			beingAClickyBoi = false;
 
 		if ((curSelected == 5)&&(controls.UI_LEFT_P))
 			curSelected = 4;
+			beingAClickyBoi = false;
 	
 
 		menuItems.forEach(function(spr:FlxSprite)
@@ -370,14 +409,10 @@ class MainMenuState extends MusicBeatState
 			spr.animation.play('idle');
 			spr.updateHitbox();
 
-			if (spr.ID == curSelected)
+			if ((spr.ID == curSelected))
 			{
 				spr.animation.play('selected');
-				var add:Float = 0;
-				if(menuItems.length > 4) {
-					add = menuItems.length * 8;
-				}
-				camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y + add);
+				beingAClickyBoi = false;
 				spr.centerOffsets();
 			}
 		});

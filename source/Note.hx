@@ -68,8 +68,8 @@ class Note extends FlxSprite
 	public var copyAngle:Bool = true;
 	public var copyAlpha:Bool = true;
 
-	public var hitHealth:Float = 0.023;
-	public var missHealth:Float = 0.0475;
+	public var hitHealth:Float = 5;
+	public var missHealth:Float = 10;
 
 	public var rating:String = 'unknown';
 	public var ratingMod:Float = 0; //9 = unknown, 0.25 = shit, 0.5 = bad, 0.75 = good, 1 = sick
@@ -357,13 +357,16 @@ class Note extends FlxSprite
 		//this bullshit is only needed for my engine -Young
 		if (ClientPrefs.gamerMode)
 			{
-				hitHealth = 0.015;
+				hitHealth = 2.5;
+				missHealth = 20;
 			}
 		else 
 			{
-				hitHealth = 0.023;
+				hitHealth = 5;
+				missHealth = 10;
 			}
 		// yes
+
 		super.update(elapsed);
 
 		if (mustPress)
