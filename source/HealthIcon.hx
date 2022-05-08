@@ -1,5 +1,7 @@
 package;
 
+
+import flixel.FlxG;
 import flixel.FlxSprite;
 import openfl.utils.Assets as OpenFlAssets;
 
@@ -10,6 +12,10 @@ class HealthIcon extends FlxSprite
 	public var sprTracker:FlxSprite;
 	private var isOldIcon:Bool = false;
 	private var isPlayer:Bool = false;
+	private var isExtended:Bool = false;
+
+	public static var isP1_Extended:Bool = false;
+	public static var isP2_Extended:Bool = false;
 	private var char:String = '';
 
 	public function new(char:String = 'bf', isPlayer:Bool = false)
@@ -42,13 +48,45 @@ class HealthIcon extends FlxSprite
 			if(!Paths.fileExists('images/' + name + '.png', IMAGE)) name = 'icons/icon-face'; //Prevents crash from missing icon
 			var file:Dynamic = Paths.image(name);
 
-			loadGraphic(file); //Load stupidly first for getting the file size
-			loadGraphic(file, true, Math.floor(width / 2), Math.floor(height)); //Then load it fr
-			iconOffsets[0] = (width - 150) / 2;
-			iconOffsets[1] = (width - 150) / 2;
-			updateHitbox();
+			loadGraphic(file); 
+			if (file.width > 300)
+				{ 
+					if (isPlayer)
+						{
+							isP1_Extended = true;
+						}
 
-			animation.add(char, [0, 1], 0, false, isPlayer);
+					if (!isPlayer)
+						{
+							isP2_Extended = true;
+						}
+
+					loadGraphic(file, true, Math.floor(width / 4), Math.floor(height)); //Then load it fr
+					iconOffsets[0] = (width - 150) / 4;
+					iconOffsets[1] = (width - 150) / 4;
+					iconOffsets[2] = (width - 150) / 4;
+					iconOffsets[3] = (width - 150) / 4;
+					updateHitbox();
+					animation.add(char, [0, 1, 2, 3], 0, false, isPlayer);
+				}
+			else 
+				{
+					if (isPlayer)
+						{
+							isP1_Extended = false;
+						}
+
+					if (!isPlayer)
+						{
+							isP2_Extended = false;
+						}
+					loadGraphic(file, true, Math.floor(width / 2), Math.floor(height)); //Then load it fr
+					iconOffsets[0] = (width - 150) / 2;
+					iconOffsets[1] = (width - 150) / 2;
+					updateHitbox();
+					animation.add(char, [0, 1], 0, false, isPlayer);
+				}		
+
 			animation.play(char);
 			this.char = char;
 
@@ -59,6 +97,7 @@ class HealthIcon extends FlxSprite
 		}
 	}
 
+			
 	override function updateHitbox()
 	{
 		super.updateHitbox();
@@ -69,4 +108,5 @@ class HealthIcon extends FlxSprite
 	public function getCharacter():String {
 		return char;
 	}
+
 }

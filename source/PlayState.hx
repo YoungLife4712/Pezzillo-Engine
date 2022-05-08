@@ -55,6 +55,8 @@ import Achievements;
 import StageData;
 import FunkinLua;
 import DialogueBoxPsych;
+import HealthIcon;
+
 #if sys
 import sys.FileSystem;
 #end
@@ -181,6 +183,10 @@ class PlayState extends MusicBeatState
 
 	public var iconP1:HealthIcon;
 	public var iconP2:HealthIcon;
+
+	public var isP1_recover:Bool;
+	public var isP2_recover:Bool;
+
 	public var camHUD:FlxCamera;
 	public var camGame:FlxCamera;
 	public var camOther:FlxCamera;
@@ -2393,15 +2399,58 @@ class PlayState extends MusicBeatState
 		if (health > maxHealth)
 			health = maxHealth;
 
-		if (healthBar.percent < 20)
-			iconP1.animation.curAnim.curFrame = 1;
-		else
-			iconP1.animation.curAnim.curFrame = 0;
+		if (healthBar.percent < 20) // BF danger, Dad Winning
+			{
+				iconP1.animation.curAnim.curFrame = 1;
+				
+				if (HealthIcon.isP1_Extended)
+					isP1_recover = true;
+				
+				if (HealthIcon.isP2_Extended)
+					iconP2.animation.curAnim.curFrame = 2;
+			}
 
-		if (healthBar.percent > 80)
-			iconP2.animation.curAnim.curFrame = 1;
+		if ((healthBar.percent > 50)&&(HealthIcon.isP1_Extended)) // BF can return to Neutral
+				isP1_recover = false;
+
+		if ((healthBar.percent > 20)&&(healthBar.percent < 50)&&(isP1_recover)) // BF Scared
+				iconP1.animation.curAnim.curFrame = 3;
 		else
-			iconP2.animation.curAnim.curFrame = 0;
+
+		if ((healthBar.percent > 20)&&(healthBar.percent < 80)&&(!isP1_recover)) // BF returns to Neutral
+				iconP1.animation.curAnim.curFrame = 0; 
+
+		else if ((healthBar.percent > 20)&&(!HealthIcon.isP1_Extended)) // BF Neutral if not Extended
+				iconP1.animation.curAnim.curFrame = 0; 
+
+		if (healthBar.percent > 80) // Dad Danger, BF Winning
+			{
+				if (HealthIcon.isP1_Extended)
+					{
+						iconP1.animation.curAnim.curFrame = 2;
+					}
+
+				iconP2.animation.curAnim.curFrame = 1;
+
+				if (HealthIcon.isP2_Extended)
+					isP2_recover = true;
+			}
+
+		if ((healthBar.percent < 50)&&(HealthIcon.isP2_Extended)) // Dad can return to Neutral
+				isP2_recover = false;
+
+		if ((healthBar.percent > 80)&&(healthBar.percent > 50)&&(isP2_recover)) // Dad Scared
+				iconP2.animation.curAnim.curFrame = 3;
+		else
+
+		if ((healthBar.percent > 20)&&(healthBar.percent < 80)&&(!isP2_recover)) // Dad returns to Neutral
+				iconP2.animation.curAnim.curFrame = 0; 
+
+		else if ((healthBar.percent < 80)&&(!HealthIcon.isP2_Extended)) // Dad Neutral if not Extended
+				iconP2.animation.curAnim.curFrame = 0; 
+
+
+
 
 		if (FlxG.keys.anyJustPressed(debugKeysCharacter) && !endingSong && !inCutscene) {
 			persistentUpdate = false;
