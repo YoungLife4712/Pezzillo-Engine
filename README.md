@@ -43,6 +43,4 @@ All of Psych Engine Features (https://github.com/ShadowMario/FNF-PsychEngine), p
  * Brand New MAIN MENU.
  
 # Planned Features:
-  - Better HP Bar functionalities.
-  - Winning and Recover Icons for all characters. (Recover icons appear once your character exits the Danger phase - less that 25% HP -).
   - Customizable in-game GUI.
