@@ -3897,7 +3897,7 @@ class PlayState extends MusicBeatState
 			{
 				if (health >= 1)
 					{
-						health = health - 1.25;
+						health = health - 0.575;
 					} 
 				if (health <= 0)
 					{
